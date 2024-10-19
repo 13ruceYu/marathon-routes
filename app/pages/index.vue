@@ -1,28 +1,43 @@
 <script setup lang="ts">
-import { corners, FULL_MARATHON_DISTANCE } from '~/constants'
+import { FULL_MARATHON_DISTANCE, splits } from '~/constants'
+
+interface ISplit {
+  st: number
+  ed: number
+  ch: string
+  x: number
+  y: number
+}
 
 const trackRef = useTemplateRef<SVGPathElement>('trackRef')
 const showSection = ref(false)
-const showCorner = ref(false)
 const sectionStart = ref(0)
 const sectionEnd = ref(0)
-const cornerStart = ref(0)
-const cornerEnd = ref(0)
+const splitStart = ref(0)
+const splitEnd = ref(0)
 const scrollPercentage = ref(0)
 const scrollContainer = useTemplateRef<HTMLDivElement>('scrollContainer')
 const { y } = useWindowScroll()
 const trackPathLength = ref(0)
+const currentSplit = ref({})
 const pathOffset = computed(() => {
   return trackPathLength.value * (1 - scrollPercentage.value)
 })
-const cornerList = ref(corners)
+const splitList = ref(splits)
+const rangeLength = computed(() => {
+  return (splitEnd.value - splitStart.value) * trackPathLength.value
+})
+const rangeOffset = computed(() => {
+  return -splitStart.value * trackPathLength.value
+})
 
 onMounted(() => {
   if (!trackRef.value)
     return
   trackPathLength.value = trackRef.value.getTotalLength()
   calcScrollPercentage()
-  cornerList.value = corners.map((c, cIdx) => {
+  setRange()
+  splitList.value = splits.map((c, cIdx) => {
     const cXY = trackRef.value.getPointAtLength(trackPathLength.value * ((cIdx + 1) / 42.195))
     return {
       ...c,
@@ -34,7 +49,18 @@ onMounted(() => {
 
 watch(y, () => {
   calcScrollPercentage()
+  setRange()
 })
+
+function setRange() {
+  splitList.value.forEach((split) => {
+    if (scrollPercentage.value > split.st && scrollPercentage.value < split.ed) {
+      splitStart.value = split.st
+      splitEnd.value = split.ed
+      currentSplit.value = split
+    }
+  })
+}
 
 function calcScrollPercentage() {
   if (!scrollContainer.value)
@@ -42,12 +68,13 @@ function calcScrollPercentage() {
   scrollPercentage.value = window.scrollY / (scrollContainer.value.scrollHeight - window.innerHeight)
 }
 
-function setScrollPercentage(percentage: number) {
-  scrollPercentage.value = percentage
+function handleSplitNameClick(percentage: number) {
   if (!scrollContainer.value)
     return
   window.scrollTo(0, percentage * (scrollContainer.value.scrollHeight - window.innerHeight))
 }
+
+// TODO: click split name, scroll to split not smooth-focus on scrollbar progress
 </script>
 
 <template>
@@ -65,30 +92,37 @@ function setScrollPercentage(percentage: number) {
                   stroke-linecap="round"
                 />
               </defs>
+              <g
+                class="range"
+                :class="[scrollPercentage ? '' : 'hidden']"
+              >
+                <use
+                  href="#track"
+                  class="path stroke-width-8 stroke-red-6"
+                  :style="{ strokeDasharray: `${rangeLength} ${trackPathLength}`, strokeDashoffset: rangeOffset }"
+                />
+              </g>
               <g class="dark:invert-100">
                 <use href="#track" class="base stroke-width-4 stroke-dark" />
-                <use href="#track" class="progress stroke-width-2 stroke-white transition-all duration-500 ease-out" :style="{ strokeDasharray: trackPathLength, strokeDashoffset: pathOffset }" />
+                <use href="#track" class="progress stroke-width-1 stroke-white transition-all duration-500 ease-out" :style="{ strokeDasharray: trackPathLength, strokeDashoffset: pathOffset }" />
               </g>
             </svg>
             <div
-              v-for="(c, key) in cornerList"
+              v-for="(c, key) in splitList"
               :key="key"
-              class="corner-name absolute cursor-pointer text-xs text-dark text-shadow dark:invert-100"
-              :class="[(c.st < scrollPercentage) || c.st < scrollPercentage && scrollPercentage < c.ed ? 'highlighted' : '']"
+              class="split-name absolute cursor-pointer text-xs text-dark text-shadow dark:invert-100"
+              :class="[(c.st < scrollPercentage) || c.st < scrollPercentage && scrollPercentage < c.ed ? 'highlighted' : 'opacity-50']"
               :style=" `left: ${(c.x || 0) * 100}%; top: ${(c.y || 0) * 100}%;`"
-              @click="setScrollPercentage(c.ed)"
+              @click="handleSplitNameClick(c.ed)"
             >
               {{ c.ch }}
             </div>
           </div>
         </div>
         <div class="detail-info border">
+          <h1>Berlin Marathon</h1>
           <p>Distance: {{ (FULL_MARATHON_DISTANCE * scrollPercentage).toFixed(3) }} KM</p>
-          <p>{{ y }}</p>
-          <p>{{ { scrollPercentage } }}</p>
-          <p>{{ { trackPathLength } }}</p>
-          <p>pathOffset: {{ pathOffset }}</p>
-          <p><Footer /></p>
+          <Footer />
         </div>
       </div>
     </div>

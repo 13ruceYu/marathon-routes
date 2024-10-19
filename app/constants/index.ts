@@ -2,7 +2,7 @@ export const appName = 'Marathon Routes'
 export const appDescription = 'Interactive Marathon Routes'
 
 export const FULL_MARATHON_DISTANCE = 42.195
-export const corners = [
+export const splits = [
   { st: 0, ed: 0.02369949046095509, ch: '1km' },
   { st: 0.02369949046095509, ed: 0.04739898092191018, ch: '2km' },
   { st: 0.04739898092191018, ed: 0.07109847138286526, ch: '3km' },
