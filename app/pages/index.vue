@@ -5,14 +5,11 @@ interface ISplit {
   st: number
   ed: number
   ch: string
-  x: number
-  y: number
+  x?: number
+  y?: number
 }
 
 const trackRef = useTemplateRef<SVGPathElement>('trackRef')
-const showSection = ref(false)
-const sectionStart = ref(0)
-const sectionEnd = ref(0)
 const splitStart = ref(0)
 const splitEnd = ref(0)
 const scrollPercentage = ref(0)
@@ -23,7 +20,7 @@ const currentSplit = ref({})
 const pathOffset = computed(() => {
   return trackPathLength.value * (1 - scrollPercentage.value)
 })
-const splitList = ref(splits)
+const splitList = ref<ISplit[]>(splits)
 const rangeLength = computed(() => {
   return (splitEnd.value - splitStart.value) * trackPathLength.value
 })
@@ -38,11 +35,10 @@ onMounted(() => {
   calcScrollPercentage()
   setRange()
   splitList.value = splits.map((c, cIdx) => {
-    const cXY = trackRef.value.getPointAtLength(trackPathLength.value * ((cIdx + 1) / 42.195))
+    const cXY = trackRef.value && trackRef.value.getPointAtLength(trackPathLength.value * ((cIdx + 1) / 42.195))
     return {
       ...c,
-      x: cXY.x / 660,
-      y: cXY.y / 530,
+      ...(cXY ? { x: cXY.x / 660, y: cXY.y / 530 } : {}),
     }
   })
 })
@@ -73,14 +69,12 @@ function handleSplitNameClick(percentage: number) {
     return
   window.scrollTo(0, percentage * (scrollContainer.value.scrollHeight - window.innerHeight))
 }
-
-// TODO: click split name, scroll to split not smooth-focus on scrollbar progress
 </script>
 
 <template>
   <div ref="scrollContainer" class="scroll-container h-screen">
     <div class="h-[8000vh]">
-      <div class="fixed grid grid-cols-[3fr_2fr] h-screen w-full">
+      <div class="dot-bg fixed grid grid-cols-[3fr_2fr] h-screen w-full">
         <div class="track-map flex items-center justify-center">
           <div class="inner relative aspect-ratio-660/530 max-h-[100vh] max-w-[60vw] flex items-center justify-center">
             <svg class="h-full w-full" viewBox="0 0 660 530" width="6600px" height="5300px" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -119,9 +113,11 @@ function handleSplitNameClick(percentage: number) {
             </div>
           </div>
         </div>
-        <div class="detail-info border">
-          <h1>Berlin Marathon</h1>
-          <p>Distance: {{ (FULL_MARATHON_DISTANCE * scrollPercentage).toFixed(3) }} KM</p>
+        <div class="detail-info flex flex-col justify-between border-l p-4">
+          <h1 class="text-3xl">
+            Berlin Marathon
+          </h1>
+          <p><span class="km-text-shadow text-6xl font-bold tracking-tighter font-mono italic">{{ (FULL_MARATHON_DISTANCE * scrollPercentage).toFixed(3) }}</span><span class="ml-2 text-xl font-bold">KM</span></p>
           <Footer />
         </div>
       </div>
@@ -130,11 +126,24 @@ function handleSplitNameClick(percentage: number) {
 </template>
 
 <style scoped>
+.dot-bg {
+  background-image: radial-gradient(black 0.5px, transparent 0.5px), radial-gradient(black 0.5px, transparent 0.5px);
+  background-size: 14px 14px;
+  background-position:
+    0 0,
+    7px 7px;
+}
 .text-shadow {
   text-shadow:
     0.1em 0 0 white,
     -0.1em 0 0 white,
     0 0.1em 0 white,
     0 -0.1em 0 white;
+}
+
+.km-text-shadow {
+  text-shadow:
+    0.02em 0.02em 0 #fff,
+    0.04em 0.04em 0 #ddd;
 }
 </style>
