@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FULL_MARATHON_DISTANCE, SHAOXIN_ROUTE, splits } from '~/constants'
+import { BERLIN_ROUTE, FULL_MARATHON_DISTANCE, splits } from '~/constants'
 
 interface ISplit {
   st: number
@@ -83,7 +83,7 @@ function handleSplitNameClick(percentage: number) {
                 <path
                   id="track"
                   ref="trackRef"
-                  :d="SHAOXIN_ROUTE"
+                  :d="BERLIN_ROUTE"
                   stroke-linecap="round"
                 />
               </defs>
@@ -105,7 +105,7 @@ function handleSplitNameClick(percentage: number) {
             <div
               v-for="(c, key) in splitList"
               :key="key"
-              class="split-name absolute cursor-pointer text-xs text-dark text-shadow dark:invert-100"
+              class="split-name absolute cursor-pointer text-xs text-shadow"
               :class="[(c.st < scrollPercentage) || c.st < scrollPercentage && scrollPercentage < c.ed ? 'highlighted' : 'opacity-50']"
               :style=" `left: ${(c.x || 0) * 100}%; top: ${(c.y || 0) * 100}%;`"
               @click="handleSplitNameClick(c.ed)"
@@ -115,7 +115,7 @@ function handleSplitNameClick(percentage: number) {
           </div>
         </div>
         <div class="detail-info flex flex-col justify-between border-l p-4">
-          <h1 class="text-3xl">
+          <h1 class="text-3xl text-base-text">
             Berlin Marathon
           </h1>
           <p><span class="km-text-shadow text-6xl font-bold tracking-tighter font-mono italic">{{ (FULL_MARATHON_DISTANCE * scrollPercentage).toFixed(3) }}</span><span class="ml-2 text-xl font-bold">KM</span></p>
@@ -128,23 +128,24 @@ function handleSplitNameClick(percentage: number) {
 
 <style scoped>
 .dot-bg {
-  background-image: radial-gradient(black 0.5px, transparent 0.5px), radial-gradient(black 0.5px, transparent 0.5px);
+  background-image: radial-gradient(gray 0.5px, transparent 0.5px), radial-gradient(gray 0.5px, transparent 0.5px);
   background-size: 14px 14px;
   background-position:
     0 0,
     7px 7px;
 }
+
 .text-shadow {
   text-shadow:
-    0.1em 0 0 white,
-    -0.1em 0 0 white,
-    0 0.1em 0 white,
-    0 -0.1em 0 white;
+    0.1em 0 0 var(--base-bg),
+    -0.1em 0 0 var(--base-bg),
+    0 0.1em 0 var(--base-bg),
+    0 -0.1em 0 var(--base-bg);
 }
 
 .km-text-shadow {
   text-shadow:
-    0.02em 0.02em 0 #fff,
+    0.02em 0.02em 0 var(--base-bg),
     0.04em 0.04em 0 #ddd;
 }
 </style>

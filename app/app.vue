@@ -20,8 +20,18 @@ body,
   scroll-behavior: smooth;
 }
 
+html {
+  --base-bg: #fff;
+  --base-text: #222;
+}
+
 html.dark {
-  background: #222;
-  color: white;
+  --base-bg: #222;
+  --base-text: #fff;
+}
+
+html {
+  background: var(--base-bg);
+  color: var(--base-text);
 }
 </style>
