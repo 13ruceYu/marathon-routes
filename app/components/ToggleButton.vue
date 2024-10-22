@@ -3,7 +3,7 @@ const model = defineModel({ default: false })
 </script>
 
 <template>
-  <div class="toggle-button inline-flex cursor-pointer items-center gap-1 text-sm" :class="[model ? 'on' : 'off']" @click="model = !model">
+  <div class="toggle-button inline-flex cursor-pointer items-center gap-2 text-sm" :class="[model ? 'on' : 'off']" @click="model = !model">
     <slot />
     <div class="toggle transition" />
   </div>

@@ -88,7 +88,6 @@ function handleSplitNameClick(percentage: number) {
                   id="track"
                   ref="trackRef"
                   :d="SHANGHAI_ROUTE"
-                  stroke-linecap="round"
                 />
               </defs>
               <use href="#track" class="base stroke-width-4 stroke-base-text" />
@@ -121,13 +120,13 @@ function handleSplitNameClick(percentage: number) {
           </div>
         </div>
         <div class="detail-info flex flex-col justify-between p-4 md:border-l">
-          <h1 class="text-3xl text-base-text">
-            Berlin Marathon
+          <h1 class="flex text-3xl text-base-text">
+            Berlin Marathon <div class="i-ic-outline-unfold-more" />
           </h1>
           <p><span class="km-text-shadow text-6xl font-bold tracking-tighter font-mono italic">{{ (FULL_MARATHON_DISTANCE * scrollPercentage).toFixed(3) }}</span><span class="ml-2 text-xl font-bold">KM</span></p>
           <div>
             <ToggleButton v-model="showSplitName">
-              显示公里数
+              <span class="text-sm text-gray hover:text-dark">显示公里数</span>
             </ToggleButton>
           </div>
           <Footer />
