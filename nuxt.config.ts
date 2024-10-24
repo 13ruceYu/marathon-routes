@@ -10,7 +10,11 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     '@nuxt/eslint',
+    '@nuxtjs/i18n',
   ],
+  i18n: {
+    vueI18n: './i18n.config.ts',
+  },
 
   experimental: {
     // when using generate, payload js assets included in sw precache manifest

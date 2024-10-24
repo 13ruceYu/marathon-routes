@@ -41,7 +41,7 @@ const splitList = computed(() => {
     }
   })
 })
-const showDialog = ref(true)
+const showDialog = ref(false)
 
 onMounted(() => {
   if (!trackRef.value)
@@ -136,7 +136,7 @@ function handleRouteClick(route: any) {
         </div>
         <div class="detail-info flex flex-col justify-between p-4 md:border-l">
           <h1 class="flex text-3xl text-base-text">
-            {{ currentMRouteName }} Marathon <div class="i-ic-outline-unfold-more cursor-pointer" @click="showDialog = true" />
+            {{ $t(currentMRouteName) }}{{ $t('Marathon') }} <div class="i-ic-outline-unfold-more cursor-pointer" @click="showDialog = true" />
           </h1>
           <Dialog v-model="showDialog">
             <div class="grid grid-cols-3 gap-2 p-2">
