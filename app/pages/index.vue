@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FULL_MARATHON_DISTANCE, SHANGHAI_ROUTE } from '~/constants'
+import { ALL_ROUTES, FULL_MARATHON_DISTANCE } from '~/constants'
 
 const trackRef = useTemplateRef<SVGPathElement>('trackRef')
 const splitStart = ref(0)
@@ -20,6 +20,8 @@ const rangeOffset = computed(() => {
 })
 const { width: windowWidth } = useWindowSize()
 const showSplitName = ref(true)
+const currentMRoute = ref(ALL_ROUTES[0]!.route)
+const currentMRouteName = ref(ALL_ROUTES[0]!.name)
 
 const splitList = computed(() => {
   const baseSplits = Array.from({ length: 42 }, (_, i) => i + 1)
@@ -39,6 +41,7 @@ const splitList = computed(() => {
     }
   })
 })
+const showDialog = ref(true)
 
 onMounted(() => {
   if (!trackRef.value)
@@ -74,6 +77,18 @@ function handleSplitNameClick(percentage: number) {
     return
   window.scrollTo(0, percentage * (scrollContainer.value.scrollHeight - window.innerHeight))
 }
+
+function handleRouteClick(route: any) {
+  currentMRoute.value = route.route
+  currentMRouteName.value = route.name
+  nextTick(() => {
+    trackPathLength.value = trackRef.value!.getTotalLength()
+    calcScrollPercentage()
+    setRange()
+    y.value = 0
+  })
+  showDialog.value = false
+}
 </script>
 
 <template>
@@ -87,7 +102,7 @@ function handleSplitNameClick(percentage: number) {
                 <path
                   id="track"
                   ref="trackRef"
-                  :d="SHANGHAI_ROUTE"
+                  :d="currentMRoute"
                 />
               </defs>
               <use href="#track" class="base stroke-width-4 stroke-base-text" />
@@ -121,8 +136,21 @@ function handleSplitNameClick(percentage: number) {
         </div>
         <div class="detail-info flex flex-col justify-between p-4 md:border-l">
           <h1 class="flex text-3xl text-base-text">
-            Berlin Marathon <div class="i-ic-outline-unfold-more" />
+            {{ currentMRouteName }} Marathon <div class="i-ic-outline-unfold-more cursor-pointer" @click="showDialog = true" />
           </h1>
+          <Dialog v-model="showDialog">
+            <div class="grid grid-cols-3 gap-2 p-2">
+              <div v-for="(route, key) in ALL_ROUTES" :key="key" class="cursor-pointer border border-gray rounded-md transition-all hover:shadow-md dark:hover:shadow-dark-1" @click="handleRouteClick(route)">
+                <svg class="h-full w-full" viewBox="0 0 660 530" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    :d="route.route"
+                    stroke-base-text
+                    stroke-width="4"
+                  />
+                </svg>
+              </div>
+            </div>
+          </Dialog>
           <p><span class="km-text-shadow text-6xl font-bold tracking-tighter font-mono italic">{{ (FULL_MARATHON_DISTANCE * scrollPercentage).toFixed(3) }}</span><span class="ml-2 text-xl font-bold">KM</span></p>
           <div>
             <ToggleButton v-model="showSplitName">
