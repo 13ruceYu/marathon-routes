@@ -1,5 +1,5 @@
 import { pwa } from './app/config/pwa'
-import { appDescription } from './app/constants/index'
+import { appDescription, appName } from './app/constants/index'
 
 export default defineNuxtConfig({
   ssr: false,
@@ -59,6 +59,14 @@ export default defineNuxtConfig({
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
         { name: 'theme-color', media: '(prefers-color-scheme: light)', content: 'white' },
         { name: 'theme-color', media: '(prefers-color-scheme: dark)', content: '#222222' },
+        { property: 'og:title', content: appName },
+        { property: 'og:description', content: appDescription },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:image', content: 'https://marathon-routes.vercel.app/mr.png' },
+        { property: 'og:image:width', content: '2980' },
+        { property: 'og:image:height', content: '1644' },
+        { property: 'og:site_name', content: appName },
+        { property: 'twitter:card', content: 'summary_large_image' },
       ],
     },
   },
