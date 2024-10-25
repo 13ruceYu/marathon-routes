@@ -41,7 +41,7 @@ const splitList = computed(() => {
     }
   })
 })
-const showDialog = ref(false)
+const showDialog = ref(true)
 
 onMounted(() => {
   if (!trackRef.value)
@@ -122,7 +122,7 @@ function handleRouteClick(route: any) {
               <div
                 v-for="(c, key) in splitList"
                 :key="key"
-                class="split-name absolute cursor-pointer text-xs text-shadow"
+                class="split-name absolute cursor-pointer text-xs text-shadow transition-all"
                 :class="[
                   (c.st < scrollPercentage) || c.st < scrollPercentage && scrollPercentage < c.ed ? 'highlighted' : 'opacity-50',
                   c.hidden && 'hidden']"
@@ -136,11 +136,16 @@ function handleRouteClick(route: any) {
         </div>
         <div class="detail-info flex flex-col justify-between p-4 md:border-l">
           <h1 class="flex text-3xl text-base-text">
-            {{ $t(currentMRouteName) }}{{ $t('Marathon') }} <div class="i-ic-outline-unfold-more cursor-pointer" @click="showDialog = true" />
+            {{ $t(`marathon.${currentMRouteName}`) }} <div class="i-ic-outline-unfold-more cursor-pointer" @click="showDialog = true" />
           </h1>
           <Dialog v-model="showDialog">
             <div class="grid grid-cols-3 gap-2 p-2">
-              <div v-for="(route, key) in ALL_ROUTES" :key="key" class="cursor-pointer border border-gray rounded-md transition-all hover:shadow-md dark:hover:shadow-dark-1" @click="handleRouteClick(route)">
+              <div
+                v-for="(route, key) in ALL_ROUTES"
+                :key="key"
+                class="relative cursor-pointer border border-gray rounded-md transition-all hover:shadow-md dark:hover:shadow-dark-1"
+                @click="handleRouteClick(route)"
+              >
                 <svg class="h-full w-full" viewBox="0 0 660 530" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     :d="route.route"
@@ -148,13 +153,14 @@ function handleRouteClick(route: any) {
                     stroke-width="4"
                   />
                 </svg>
+                <span class="absolute bottom-1 right-1 rounded-sm bg-base-text px-1 text-xs text-base-bg">{{ $t(`marathon.${route.name}`) }}</span>
               </div>
             </div>
           </Dialog>
           <p><span class="km-text-shadow text-6xl font-bold tracking-tighter font-mono italic">{{ (FULL_MARATHON_DISTANCE * scrollPercentage).toFixed(3) }}</span><span class="ml-2 text-xl font-bold">KM</span></p>
           <div>
             <ToggleButton v-model="showSplitName">
-              <span class="text-sm text-gray hover:text-dark">显示公里数</span>
+              <span class="text-sm text-gray hover:text-dark">{{ $t('showKM') }}</span>
             </ToggleButton>
           </div>
           <Footer />

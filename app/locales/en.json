@@ -1,4 +1,9 @@
 {
-  "Berlin": "Berlin",
-  "Marathon": "Marathon"
+  "marathon": {
+    "Berlin": "Berlin Marathon",
+    "Shanghai": "Shanghai Marathon",
+    "Hangzhou": "Hangzhou Marathon",
+    "Shaoxing": "Shaoxing Marathon"
+  },
+  "showKM": "Show KM"
 }

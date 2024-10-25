@@ -1,4 +1,9 @@
 {
-  "Berlin": "柏林",
-  "Marathon": "马拉松"
+  "marathon": {
+    "Berlin": "柏林马拉松",
+    "Shanghai": "上海马拉松",
+    "Hangzhou": "杭州马拉松",
+    "Shaoxing": "绍兴马拉松"
+  },
+  "showKM": "显示公里数"
 }

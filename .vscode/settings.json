@@ -44,5 +44,6 @@
   "iconify.inplace": true,
   "i18n-ally.localesPaths": [
     "app/locales"
-  ]
+  ],
+  "i18n-ally.sourceLanguage": "zh"
 }
