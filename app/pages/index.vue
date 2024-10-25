@@ -1,30 +1,5 @@
 <script setup lang="ts">
-import { ALL_ROUTES, appDescription, appName, appUrl, FULL_MARATHON_DISTANCE } from '~/constants'
-
-useSeoMeta({
-  description: appDescription,
-  ogTitle: appName,
-  ogDescription: appDescription,
-  ogImage: 'https://marathon-routes.vercel.app/mr.png',
-  ogUrl: appUrl,
-  twitterTitle: appName,
-  twitterDescription: appDescription,
-  twitterImage: 'https://marathon-routes.vercel.app/mr.png',
-  twitterCard: 'summary',
-})
-
-useHead({
-  htmlAttrs: {
-    lang: 'en',
-  },
-  link: [
-    {
-      rel: 'icon',
-      type: 'image/svg+xml',
-      href: '/favicon.svg',
-    },
-  ],
-})
+import { ALL_ROUTES, FULL_MARATHON_DISTANCE } from '~/constants'
 
 const trackRef = useTemplateRef<SVGPathElement>('trackRef')
 const splitStart = ref(0)
@@ -164,7 +139,7 @@ function handleRouteClick(route: any) {
             {{ $t(`marathon.${currentMRouteName}`) }} <div class="i-ic-outline-unfold-more cursor-pointer" @click="showDialog = true" />
           </h1>
           <Dialog v-model="showDialog">
-            <div class="grid grid-cols-3 gap-2 p-2">
+            <div class="grid grid-cols-1 gap-2 p-2 md:grid-cols-3">
               <div
                 v-for="(route, key) in ALL_ROUTES"
                 :key="key"
