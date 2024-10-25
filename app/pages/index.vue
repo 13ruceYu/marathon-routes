@@ -1,5 +1,30 @@
 <script setup lang="ts">
-import { ALL_ROUTES, FULL_MARATHON_DISTANCE } from '~/constants'
+import { ALL_ROUTES, appDescription, appName, appUrl, FULL_MARATHON_DISTANCE } from '~/constants'
+
+useSeoMeta({
+  description: appDescription,
+  ogTitle: appName,
+  ogDescription: appDescription,
+  ogImage: 'https://github.com/user-attachments/assets/f388f78d-ebd1-450b-b3be-bd6ad8fec848',
+  ogUrl: appUrl,
+  twitterTitle: appName,
+  twitterDescription: appDescription,
+  twitterImage: 'https://github.com/user-attachments/assets/f388f78d-ebd1-450b-b3be-bd6ad8fec848',
+  twitterCard: 'summary',
+})
+
+useHead({
+  htmlAttrs: {
+    lang: 'en',
+  },
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/svg+xml',
+      href: 'https://marathon-routes.vercel.app/favicon.svg',
+    },
+  ],
+})
 
 const trackRef = useTemplateRef<SVGPathElement>('trackRef')
 const splitStart = ref(0)
@@ -41,7 +66,7 @@ const splitList = computed(() => {
     }
   })
 })
-const showDialog = ref(true)
+const showDialog = ref(false)
 
 onMounted(() => {
   if (!trackRef.value)

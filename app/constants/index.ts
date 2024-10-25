@@ -1,5 +1,6 @@
 export const appName = 'Marathon Routes'
 export const appDescription = 'Interactive Marathon Routes'
+export const appUrl = 'https://marathon-routes.vercel.app/'
 
 export const FULL_MARATHON_DISTANCE = 42.195
 
