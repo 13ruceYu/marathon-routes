@@ -5,12 +5,25 @@ useSeoMeta({
   description: appDescription,
   ogTitle: appName,
   ogDescription: appDescription,
-  ogImage: 'https://github.com/user-attachments/assets/f388f78d-ebd1-450b-b3be-bd6ad8fec848',
+  ogImage: 'https://marathon-routes.vercel.app/mr.png',
   ogUrl: appUrl,
   twitterTitle: appName,
   twitterDescription: appDescription,
-  twitterImage: 'https://github.com/user-attachments/assets/f388f78d-ebd1-450b-b3be-bd6ad8fec848',
+  twitterImage: 'https://marathon-routes.vercel.app/mr.png',
   twitterCard: 'summary',
+})
+
+useHead({
+  htmlAttrs: {
+    lang: 'en',
+  },
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/svg+xml',
+      href: '/favicon.svg',
+    },
+  ],
 })
 
 const trackRef = useTemplateRef<SVGPathElement>('trackRef')
