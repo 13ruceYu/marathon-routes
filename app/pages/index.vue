@@ -13,19 +13,6 @@ useSeoMeta({
   twitterCard: 'summary',
 })
 
-useHead({
-  htmlAttrs: {
-    lang: 'en',
-  },
-  link: [
-    {
-      rel: 'icon',
-      type: 'image/svg+xml',
-      href: 'https://marathon-routes.vercel.app/favicon.svg',
-    },
-  ],
-})
-
 const trackRef = useTemplateRef<SVGPathElement>('trackRef')
 const splitStart = ref(0)
 const splitEnd = ref(0)
